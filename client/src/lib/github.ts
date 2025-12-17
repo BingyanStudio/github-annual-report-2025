@@ -182,17 +182,6 @@ export async function fetchGitHubStats(token: string, username: string): Promise
     day.count > max.count ? day : max
   , { date: '', count: 0 });
 
-  const persona = calculatePersona(contributionDays);
-
-  const radarData: Array<{ subject: string; value: number; fullMark: 100 }> = [
-    { subject: '代码量', value: Math.min((totalCommits / 500) * 100, 100), fullMark: 100 as const },
-    { subject: '活跃度', value: Math.min((contributionDays.filter((d) => d.count > 0).length / 365) * 100, 100), fullMark: 100 as const },
-    { subject: '协作力', value: Math.min((totalPRs / 50) * 100, 100), fullMark: 100 as const },
-    { subject: '影响力', value: Math.min((totalStars / 100) * 100, 100), fullMark: 100 as const },
-    { subject: '多样性', value: Math.min((topLanguages.length / 5) * 100, 100), fullMark: 100 as const },
-    { subject: '创造力', value: Math.min((totalRepos / 20) * 100, 100), fullMark: 100 as const },
-  ];
-
   const activeDays = contributionDays.filter((d) => d.count > 0).length;
   
   let longestStreak = 0;
@@ -205,6 +194,26 @@ export async function fetchGitHubStats(token: string, username: string): Promise
       currentStreak = 0;
     }
   });
+
+  const persona = calculatePersona(
+    contributionDays,
+    totalCommits,
+    totalPRs,
+    totalReviews,
+    totalIssues,
+    topLanguages.length,
+    longestStreak,
+    busiestDay.count
+  );
+
+  const radarData: Array<{ subject: string; value: number; fullMark: 100 }> = [
+    { subject: '代码量', value: Math.min((totalCommits / 500) * 100, 100), fullMark: 100 as const },
+    { subject: '活跃度', value: Math.min((contributionDays.filter((d) => d.count > 0).length / 365) * 100, 100), fullMark: 100 as const },
+    { subject: '协作力', value: Math.min((totalPRs / 50) * 100, 100), fullMark: 100 as const },
+    { subject: '影响力', value: Math.min((totalStars / 100) * 100, 100), fullMark: 100 as const },
+    { subject: '多样性', value: Math.min((topLanguages.length / 5) * 100, 100), fullMark: 100 as const },
+    { subject: '创造力', value: Math.min((totalRepos / 20) * 100, 100), fullMark: 100 as const },
+  ];
 
   const averageCommitsPerDay = activeDays > 0 ? totalCommits / activeDays : 0;
 
@@ -278,7 +287,16 @@ export async function fetchGitHubStats(token: string, username: string): Promise
     averageCommitsPerDay,  };
 }
 
-function calculatePersona(contributionDays: ContributionCalendarDay[]): string {
+function calculatePersona(
+  contributionDays: ContributionCalendarDay[],
+  totalCommits: number,
+  totalPRs: number,
+  totalReviews: number,
+  totalIssues: number,
+  languageCount: number,
+  longestStreak: number,
+  maxDailyCommits: number
+): string {
   const weekendCount = contributionDays.filter((day) => {
     const date = new Date(day.date);
     const dayOfWeek = date.getDay();
@@ -291,9 +309,54 @@ function calculatePersona(contributionDays: ContributionCalendarDay[]): string {
   const avgPerDay = activeDays.reduce((sum, d) => sum + d.count, 0) / activeDays.length;
   const consistency = activeDays.length / 365;
 
+  // 计算月份集中度（贡献最多的3个月占比）
+  const commitsByMonth = new Map<string, number>();
+  contributionDays.forEach(day => {
+    const month = day.date.substring(0, 7);
+    commitsByMonth.set(month, (commitsByMonth.get(month) || 0) + day.count);
+  });
+  const top3Months = Array.from(commitsByMonth.values())
+    .sort((a, b) => b - a)
+    .slice(0, 3)
+    .reduce((sum, val) => sum + val, 0);
+  const monthConcentration = top3Months / totalCommits;
+
+  // 按优先级判断类型（从特殊到一般）
+  
+  // 1. 高产开发者 - 总贡献数非常高
+  if (totalCommits > 2000) return 'high-achiever';
+  
+  // 2. 爆发型开发者 - 单日贡献非常高
+  if (maxDailyCommits > 35) return 'burst-coder';
+  
+  // 3. 连续贡献者 - 最长连续天数很长
+  if (longestStreak > 60) return 'streak-master';
+  
+  // 4. 语言探索者 - 使用多种编程语言
+  if (languageCount >= 6) return 'language-explorer';
+  
+  // 5. 协作达人 - PR Review 或 PR 数量多
+  if (totalReviews > 15 || totalPRs > 25) return 'collaborator';
+  
+  // 6. 维护者 - PR 和 Issue 都较多
+  if (totalPRs + totalIssues > 20) return 'maintainer';
+  
+  // 7. 周末战士 - 周末贡献多
   if (weekendCount > 50) return 'weekend-warrior';
+  
+  // 8. 稳定贡献者 - 一致性很高
   if (consistency > 0.7) return 'consistent-contributor';
+  
+  // 9. 专注型开发者 - 集中在某些月份
+  if (monthConcentration > 0.5 && totalCommits > 500) return 'focused-coder';
+  
+  // 10. 夜猫子程序员 - 平均每天贡献高
   if (avgPerDay > 5) return 'night-owl';
+  
+  // 11. 稳步建设者 - 中等但持续的贡献
+  if (totalCommits > 300 && consistency > 0.3 && consistency < 0.6) return 'steady-builder';
+  
+  // 12. 早起鸟工程师 - 默认类型
   return 'early-bird';
 }
 

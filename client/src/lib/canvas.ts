@@ -159,10 +159,18 @@ export async function generateReportImage(
   const personaY = 1020; 
 
   const personaLabels: Record<string, string> = {
-    'night-owl': 'Night Owl Coder',
-    'early-bird': 'Early Bird Engineer',
+    'high-achiever': 'High Achiever',
+    'burst-coder': 'Burst Coder',
+    'streak-master': 'Streak Master',
+    'language-explorer': 'Language Explorer',
+    'collaborator': 'Collaborator',
+    'maintainer': 'Maintainer',
     'weekend-warrior': 'Weekend Warrior',
     'consistent-contributor': 'Marathon Runner',
+    'focused-coder': 'Focused Coder',
+    'night-owl': 'Night Owl Coder',
+    'steady-builder': 'Steady Builder',
+    'early-bird': 'Early Bird Engineer',
     default: 'Code Architect',
   };
 

@@ -15,10 +15,18 @@ export function RadarSlide() {
   if (!slidesData) return null;
 
   const personaLabels: Record<string, string> = {
-    'night-owl': '夜猫子程序员',
-    'early-bird': '早起鸟工程师',
+    'high-achiever': '高产开发者',
+    'burst-coder': '爆发型开发者',
+    'streak-master': '连续贡献者',
+    'language-explorer': '语言探索者',
+    'collaborator': '协作达人',
+    'maintainer': '维护者',
     'weekend-warrior': '周末战士',
     'consistent-contributor': '稳定贡献者',
+    'focused-coder': '专注型开发者',
+    'night-owl': '夜猫子程序员',
+    'steady-builder': '稳步建设者',
+    'early-bird': '早起鸟工程师',
     default: '代码创造者',
   };
 

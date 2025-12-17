@@ -31,10 +31,18 @@ export class AIService {
     }
 
     const personaDescriptions: Record<string, string> = {
-      'night-owl': '夜猫子程序员，深夜才是你的黄金时段',
-      'early-bird': '早起鸟工程师，清晨的阳光见证你的勤奋',
+      'high-achiever': '高产开发者，你的代码贡献量令人惊叹',
+      'burst-coder': '爆发型开发者，单日贡献能力超强',
+      'streak-master': '连续贡献者，你的坚持令人敬佩',
+      'language-explorer': '语言探索者，你精通多种编程语言',
+      'collaborator': '协作达人，你擅长团队协作和代码审查',
+      'maintainer': '维护者，你专注于项目的持续改进',
       'weekend-warrior': '周末战士，休息日依然在代码世界征战',
       'consistent-contributor': '稳定贡献者，每天都有你的足迹',
+      'focused-coder': '专注型开发者，你在特定时期集中发力',
+      'night-owl': '夜猫子程序员，深夜才是你的黄金时段',
+      'steady-builder': '稳步建设者，你以稳定的节奏持续贡献',
+      'early-bird': '早起鸟工程师，清晨的阳光见证你的勤奋',
       'default': '代码创造者'
     };
 
@@ -150,10 +158,18 @@ export class AIService {
 
       if (stats) {
         const personaDescriptions: Record<string, string> = {
-          'night-owl': '夜猫子程序员，深夜才是你的黄金时段',
-          'early-bird': '早起鸟工程师，清晨的阳光见证你的勤奋',
+          'high-achiever': '高产开发者，你的代码贡献量令人惊叹',
+          'burst-coder': '爆发型开发者，单日贡献能力超强',
+          'streak-master': '连续贡献者，你的坚持令人敬佩',
+          'language-explorer': '语言探索者，你精通多种编程语言',
+          'collaborator': '协作达人，你擅长团队协作和代码审查',
+          'maintainer': '维护者，你专注于项目的持续改进',
           'weekend-warrior': '周末战士，休息日依然在代码世界征战',
           'consistent-contributor': '稳定贡献者，每天都有你的足迹',
+          'focused-coder': '专注型开发者，你在特定时期集中发力',
+          'night-owl': '夜猫子程序员，深夜才是你的黄金时段',
+          'steady-builder': '稳步建设者，你以稳定的节奏持续贡献',
+          'early-bird': '早起鸟工程师，清晨的阳光见证你的勤奋',
           'default': '代码创造者'
         };
 

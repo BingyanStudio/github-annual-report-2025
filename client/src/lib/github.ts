@@ -120,7 +120,7 @@ export async function fetchGitHubStats(token: string, username: string): Promise
             }
           }
         }
-        repositories(first: 100, ownerAffiliations: OWNER, orderBy: {field: STARGAZERS, direction: DESC}) {
+        repositories(first: 100, ownerAffiliations: [OWNER, ORGANIZATION_MEMBER, COLLABORATOR], orderBy: {field: STARGAZERS, direction: DESC}) {
           totalCount
           nodes {
             name
